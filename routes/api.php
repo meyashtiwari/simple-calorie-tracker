@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodDataController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -21,8 +22,9 @@ Route::post('login', [AccessTokenController::class, 'issueToken'])->name('login'
 Route::post('register', [AuthController::class, 'register'])->name('register');
 
 Route::middleware('auth:api')->group(function() {    
-    Route::get('users/me', function() {
-        return response(json_encode(auth()->user()));
+    Route::controller(UserController::class)->prefix('users')->group(function() {
+        Route::get('/me', 'getCurrentUser');
+        Route::get('/calories', 'getTotalCaloriesForToday');
     });
 
     Route::apiResource('food', FoodDataController::class);

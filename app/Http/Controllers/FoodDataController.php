@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FoodData;
 use Illuminate\Http\Request;
 
 class FoodDataController extends Controller
@@ -13,7 +14,9 @@ class FoodDataController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        $data = FoodData::where('user_id', $user->id)->get();
+        return response(json_encode($data));
     }
 
 

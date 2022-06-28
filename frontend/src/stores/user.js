@@ -5,7 +5,7 @@ import ApiHandler from "../utils/ApiHandler"
 export const useUser = defineStore('user', {
     state: () => ({
         user: null,
-        loading: false
+        loading: false,
     }),
     actions: {
         setLoading(loading) {
@@ -51,5 +51,13 @@ export const useUser = defineStore('user', {
                 return false
             }
         },
+        async getAllFoodEntries() {
+            try {
+                const {data} = await ApiHandler.get('/food', ApiHandler.getAuthHeader());
+                return data;
+            } catch (error) {
+                return false
+            }
+        }
     }
 })
