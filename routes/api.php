@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FoodDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -19,6 +20,10 @@ use Laravel\Passport\Http\Controllers\AccessTokenController;
 Route::post('login', [AccessTokenController::class, 'issueToken'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('register');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function() {    
+    Route::get('users/me', function() {
+        return response(json_encode(auth()->user()));
+    });
+
+    Route::apiResource('food', FoodDataController::class);
 });

@@ -1,16 +1,22 @@
 <script setup lang="ts">
     import {reactive} from 'vue';
+    import {useAuth} from "@/stores/auth.js";
     import {Field, Form, ErrorMessage} from "vee-validate"
     import { required, email } from "@vee-validate/rules";
     import CalorieAppIcon from '@/components/icons/CalorieAppIcon.vue';
+    import router from '@/router/index.js';
+
+    const store = useAuth();
 
     const user = reactive({
       email: '',
       password: ''
     })
 
-    const onSubmit = ((values: object) => {
-        
+    const onSubmit = ((values: typeof user) => {
+        store.login(values.email, values.password).then(async () => {
+            await router.push({name: 'home'});
+        });
     });
 </script>
 
@@ -41,7 +47,7 @@
                             </Field>
                             <ErrorMessage class="text-red-400 text-sm" name="password" />
                             <label class="label">
-                                <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+                                <router-link to="/signup" class="label-text-alt link link-hover">New User? Signup here.</router-link>
                             </label>
                         </div>
                         <div class="form-control mt-6">

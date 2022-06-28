@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('daily_calorie_limit')->default(2100);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['ADMIN', 'CUSTOMER'])->default('CUSTOMER');
             $table->rememberToken();
             $table->timestamps();
         });
