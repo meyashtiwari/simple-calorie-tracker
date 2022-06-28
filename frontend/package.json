@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vee-validate/rules": "^4.5.11",
+    "@vuepic/vue-datepicker": "^3.2.2",
     "axios": "^0.27.2",
     "daisyui": "^2.17.0",
     "pinia": "^2.0.14",

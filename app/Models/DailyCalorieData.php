@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class DailyCalorieData extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'calorie_consumed'
+    ];
 }

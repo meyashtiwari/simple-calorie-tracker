@@ -58,6 +58,17 @@ export const useUser = defineStore('user', {
             } catch (error) {
                 return false
             }
+        },
+        async createNewFoodEntry(data) {
+            try {
+                await ApiHandler.post('/food',  ApiHandler.getAuthHeader(), data)
+                return true
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
         }
     }
 })
