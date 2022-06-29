@@ -9,9 +9,10 @@
     
     onMounted(async () => {
         food_entries.value = await userStore.getAllFoodEntries();
+        
     });
 
-    computed
+    
 
 </script>
 
