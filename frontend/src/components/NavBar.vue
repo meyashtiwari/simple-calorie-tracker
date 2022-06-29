@@ -4,7 +4,7 @@
     import {useUser} from "@/stores/user.js";
     import AddEntryForm from "@/components/AddEntryForm.vue";
     import {Field, Form, ErrorMessage} from "vee-validate"
-    import { numeric, required } from "@vee-validate/rules";
+    import { required } from "@vee-validate/rules";
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
     import moment from 'moment'
@@ -15,13 +15,15 @@
         dailyLimit: Number,
         limit:Boolean,
         admin: Boolean,
-        metaData: Array 
+        metaData: Array,
+        users: Array
     });
 
     const food = reactive({
-      name: '',
-      calorie_value: '',
-      taken_at: ''
+        user_id: '',
+        name: '',
+        calorie_value: '',
+        taken_at: ''
     });
 
     const showForm = ref(false);
@@ -38,17 +40,29 @@
 
     const onSubmit = ((values) => {
         values.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
-        console.log(values);
-        userStore.createNewFoodEntry(values).then(async () => {
-            await userStore.getAllFoodEntries();
-            showForm.value = false;
-            food.name = '';
-            food.calorie_value = '';
-            food.taken_at = '';
-        });
+        if(props.admin === true) {
+            if(food.user_id === '')
+                return;
+            else {
+                userStore.createNewFoodEntryAdmin(food).then(async () => {
+                await userStore.getAllFoodEntries();
+                showForm.value = false;
+                food.user_id = '';
+                food.name = '';
+                food.calorie_value = '';
+                food.taken_at = '';
+            });
+            }
+        } else {
+            userStore.createNewFoodEntry(values).then(async () => {
+                await userStore.getAllFoodEntries();
+                showForm.value = false;
+                food.name = '';
+                food.calorie_value = '';
+                food.taken_at = '';
+            });
+        }
     });
-    
-    
 
 </script>
 
@@ -131,6 +145,15 @@
                         <div class="mb-4 flex-grow">
                         <div class="text-lg font-semibold text-slate-800">
                                 <div class="form-control w-full">
+                                    <label v-if="props.admin && props.users" class="label">
+                                        <span class="label-text">Select a user to add entry for:</span>
+                                    </label>
+                                    <select v-if="props.admin && props.users" v-model="food.user_id" class="select select-bordered w-full max-w-xs">
+                                        <option value='' disabled selected>Pick user</option>
+                                        <option v-for="user in props.users" :value="user.id">
+                                            {{ user.name }}
+                                        </option>
+                                    </select>
                                     <label class="label">
                                         <span class="label-text">Date/time when the food was taken?</span>
                                     </label>
@@ -150,8 +173,8 @@
                                     <Field name="calorie_value" :rules="[required]" v-model="food.calorie_value" v-slot="{field, errors}">
                                         <input type="number" placeholder="Type here" class="input input-bordered w-full" v-bind="field"/>
                                     </Field>
-                                    <ErrorMessage name="calorie_value" >
-                                        <message class="text-red-400 text-sm" >Invalid value</message>
+                                    <ErrorMessage name="calorie_value">
+                                        <message class="text-red-400 text-sm">Invalid value</message>
                                     </ErrorMessage>
                                     
                                 </div>

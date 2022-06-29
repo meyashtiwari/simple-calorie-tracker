@@ -78,11 +78,13 @@ class FoodDataController extends Controller
         $validated = $request->validate([
             'name' => 'required',
             'calorie_value' => 'required',
+            'taken_at' => 'required'
         ]);
 
         FoodData::where('id', $id)->update([
             'name' => $validated['name'],
             'calorie_value' => $validated['calorie_value'],
+            'taken_at' => $validated['taken_at']
         ]);
 
         return response(json_encode(["error" => false]), 200);

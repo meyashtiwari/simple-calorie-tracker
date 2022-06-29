@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodDataController;
 use App\Http\Controllers\UserController;
@@ -32,5 +33,9 @@ Route::middleware('auth:api')->group(function() {
     Route::get('foodLastSeven', [FoodDataController::class,'foodLastSeven']);
     Route::get('foodLastSevenPrev', [FoodDataController::class,'foodLastSevenPrev']);
     Route::get('avgCalorieLastSeven', [FoodDataController::class,'avgCalorieLastSeven']);
-    
+
+    Route::controller(AdminController::class)->prefix('admin')->group(function() {
+        Route::get('/users', 'getAllUsers');
+        Route::post('/food', 'createFoodEntryAdmin');
+    });
 });

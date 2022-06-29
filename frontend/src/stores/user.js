@@ -101,6 +101,50 @@ export const useUser = defineStore('user', {
                 }
                 return false
             }
+        },
+        async createNewFoodEntryAdmin(data) {
+            try {
+                await ApiHandler.post('/admin/food',  ApiHandler.getAuthHeader(), data)
+                return true
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
+        },
+        async updateFoodEntry(id, data) {
+            try {
+                await ApiHandler.patch(`/food/${id}`, data, ApiHandler.getAuthHeader());
+                return true
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
+        },
+        async deleteFoodEntry(id) {
+            try {
+                await ApiHandler.delete(`/food/${id}`, {}, ApiHandler.getAuthHeader())
+                return true
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
+        },
+        async getAllUsers() {
+            try {
+                const {data} = await ApiHandler.get(`/admin/users`,  ApiHandler.getAuthHeader())
+                return data
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
         }
     }
 })
