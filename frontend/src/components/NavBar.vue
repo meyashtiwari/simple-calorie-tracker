@@ -4,15 +4,18 @@
     import {useUser} from "@/stores/user.js";
     import AddEntryForm from "@/components/AddEntryForm.vue";
     import {Field, Form, ErrorMessage} from "vee-validate"
-    import { required } from "@vee-validate/rules";
+    import { numeric, required } from "@vee-validate/rules";
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
+    import moment from 'moment'
     
     const appName = import.meta.env.VITE_APP_NAME;
 
     const props = defineProps({
         dailyLimit: Number,
-        metaData: Array
+        limit:Boolean,
+        admin: Boolean,
+        metaData: Array 
     });
 
     const food = reactive({
@@ -34,6 +37,8 @@
     }
 
     const onSubmit = ((values) => {
+        values.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
+        console.log(values);
         userStore.createNewFoodEntry(values).then(async () => {
             await userStore.getAllFoodEntries();
             showForm.value = false;
@@ -42,8 +47,11 @@
             food.taken_at = '';
         });
     });
+    
+    
 
 </script>
+
 <template>
     <div class="navbar bg-base-300">
         <div class="flex-1">
@@ -52,6 +60,15 @@
                 <button @click="toggleForm" class="btn">
                     New Food Entry
                 </button>
+            </div>
+            <div v-show="props.admin" class="px-1">
+                <button @click="logout" class="btn">
+                    Logout
+                </button>
+                <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>
+            </div>
+            <div v-if="props.metaData" class="px-1">
+                <span class="text-red-500" v-show="props?.metaData[0]?.calories_today>props.dailyLimit" >Calorie limit exceeded for today</span>
             </div>
         </div>
         <div v-if="props.metaData" class="flex-none">
@@ -108,9 +125,15 @@
             <Form @submit="onSubmit">
                 <div class="flex">
                     <!-- Modal header -->
-                        <div class="mb-2 flex-grow">
+                        <div class="mb-4 flex-grow">
                         <div class="text-lg font-semibold text-slate-800">
                                 <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text">Date/time when the food was taken?</span>
+                                    </label>
+                                    <Field name="taken_at" :rules="[required]" v-model="food.taken_at" v-slot="{field, errors}">
+                                        <Datepicker v-model="food.taken_at"  v-bind="field"></Datepicker>
+                                    </Field>
                                     <label class="label">
                                         <span class="label-text">Food/product name?</span>
                                     </label>
@@ -124,13 +147,10 @@
                                     <Field name="calorie_value" :rules="[required]" v-model="food.calorie_value" v-slot="{field, errors}">
                                         <input type="number" placeholder="Type here" class="input input-bordered w-full" v-bind="field"/>
                                     </Field>
-                                    <ErrorMessage class="text-red-400 text-sm" name="calorie_value" />
-                                    <label class="label">
-                                        <span class="label-text">Date/time when the food was taken?</span>
-                                    </label>
-                                    <Field name="taken_at" :rules="[required]" v-model="food.taken_at" v-slot="{field, errors}">
-                                        <Datepicker v-model="food.taken_at" v-bind="field"></Datepicker>
-                                    </Field>
+                                    <ErrorMessage name="calorie_value" >
+                                        <message class="text-red-400 text-sm" >Invalid value</message>
+                                    </ErrorMessage>
+                                    
                                 </div>
                         </div>
                         </div>

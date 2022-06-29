@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\FoodData;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\DB;
 
 class FoodDataController extends Controller
 {
@@ -15,11 +17,14 @@ class FoodDataController extends Controller
      */
     public function index()
     {
+        //DB::enableQueryLog();
         $user = auth()->user();
-        $data = FoodData::where('user_id', $user->id)->whereRaw('date(taken_at) = date(now())')->get();
+        $data = FoodData::where('user_id', $user->id)->get();
         $metaData = FoodData::selectRaw('count(*) as count, SUM(calorie_value) as calories_today')
                             ->whereRaw('date(taken_at) = date(now())')
+                            ->where('user_id', $user->id)
                             ->get();
+        //dd(DB::getQueryLog());
         return response(json_encode(["data" => $data, "metaData" => $metaData]));
     }
 
@@ -92,5 +97,48 @@ class FoodDataController extends Controller
     public function destroy($id)
     {
         FoodData::where('id', $id)->delete();
+    }
+
+    public function foodAll()
+    {
+        
+        $user = auth()->user();
+        $data = FoodData::all();
+    
+        return response(json_encode(["data" => $data]));
+        
+    }
+    public function foodLastSeven()
+    {
+        
+        $user = auth()->user();
+        $data = FoodData::selectRaw('count(*) as count')
+        ->whereRaw('date(taken_at) > DATE(NOW() - INTERVAL 7 DAY)')
+        ->get();
+    
+        return response(json_encode(["data" => $data]));
+        
+    }
+    public function foodLastSevenPrev()
+    {
+        
+        $user = auth()->user();
+        $data = FoodData::selectRaw('count(*) as count')
+        ->whereRaw('date(taken_at) > DATE(NOW() - INTERVAL 14 DAY)')
+        ->get();
+    
+        return response(json_encode(["data" => $data]));
+        
+    }
+    public function avgCalorieLastSeven()
+    {
+        
+        $user = auth()->user();
+        $data = FoodData::selectRaw('avg(calorie_value) as avg')
+        ->whereRaw('date(taken_at) > DATE(NOW() - INTERVAL 7 DAY)')
+        ->get();
+    
+        return response(json_encode(["data" => $data]));
+        
     }
 }

@@ -36,6 +36,15 @@ const router = createRouter({
                 adminOnly: true
             },
             component: () => import("../views/admin/HomeView.vue"),
+        },
+        {
+            path: "/admin/report",
+            name: "reports",
+            meta: {
+                requiresAuth: true,
+                adminOnly: true
+            },
+            component: () => import("../views/admin/ReportView.vue"),
         }
     ],
 });

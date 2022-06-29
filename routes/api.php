@@ -28,4 +28,9 @@ Route::middleware('auth:api')->group(function() {
     });
 
     Route::apiResource('food', FoodDataController::class);
+    Route::get('foodAll', [FoodDataController::class,'foodAll']);
+    Route::get('foodLastSeven', [FoodDataController::class,'foodLastSeven']);
+    Route::get('foodLastSevenPrev', [FoodDataController::class,'foodLastSevenPrev']);
+    Route::get('avgCalorieLastSeven', [FoodDataController::class,'avgCalorieLastSeven']);
+    
 });

@@ -59,6 +59,38 @@ export const useUser = defineStore('user', {
                 return false
             }
         },
+        async getAllUsersFoodEntries() {
+            try {
+                const {data} = await ApiHandler.get('/foodAll', ApiHandler.getAuthHeader());
+                return data;
+            } catch (error) {
+                return false
+            }
+        },
+        async getAllUsersLastSevenFoodEntries() {
+            try {
+                const {data} = await ApiHandler.get('/foodLastSeven', ApiHandler.getAuthHeader());
+                return data;
+            } catch (error) {
+                return false
+            }
+        },
+        async getAllUsersLastSevenPrevFoodEntries() {
+            try {
+                const {data} = await ApiHandler.get('/foodLastSevenPrev', ApiHandler.getAuthHeader());
+                return data;
+            } catch (error) {
+                return false
+            }
+        },
+        async avgCalorieLastSeven() {
+            try {
+                const {data} = await ApiHandler.get('/avgCalorieLastSeven', ApiHandler.getAuthHeader());
+                return data;
+            } catch (error) {
+                return false
+            }
+        },
         async createNewFoodEntry(data) {
             try {
                 await ApiHandler.post('/food',  ApiHandler.getAuthHeader(), data)
