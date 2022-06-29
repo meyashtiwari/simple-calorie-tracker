@@ -26,6 +26,9 @@
         taken_at: ''
     });
 
+    const emit = defineEmits(['refresh']);
+    const refresh = () => emit('refresh');
+
     const showForm = ref(false);
     const store = useAuth();
     const userStore = useUser();
@@ -51,6 +54,7 @@
                 food.name = '';
                 food.calorie_value = '';
                 food.taken_at = '';
+                refresh();
             });
             }
         } else {
@@ -60,6 +64,7 @@
                 food.name = '';
                 food.calorie_value = '';
                 food.taken_at = '';
+                refresh();
             });
         }
     });

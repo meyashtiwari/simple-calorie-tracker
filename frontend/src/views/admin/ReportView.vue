@@ -11,15 +11,17 @@
     const calorieLastSeven = ref([]);
     const users = ref([]);
     
-    onMounted(async () => {
+    onMounted(() => {
+        getData();
+    });
+
+    async function getData() {
         food_entries.value = await userStore.getAllUsersFoodEntries();
         last_seven_food_entries.value = await userStore.getAllUsersLastSevenFoodEntries();
         last_seven_food_prev_entries.value = await userStore.getAllUsersLastSevenPrevFoodEntries();
         calorieLastSeven.value = await userStore.avgCalorieLastSeven();
         users.value = await userStore.getAllUsers();
-    });
-
-    
+    }
 
 </script>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import {useUser} from "@/stores/user.js";
-    import { ref, reactive } from "vue";
+    import { ref, reactive, defineEmits } from "vue";
     import AddEntryForm from "@/components/AddEntryForm.vue";
     import { numeric, required } from "@vee-validate/rules";
     import {Field, Form, ErrorMessage} from "vee-validate"
@@ -13,6 +13,9 @@
         admin: Boolean
     });
 
+    const emit = defineEmits(['refresh']);
+    const refresh = () => emit('refresh');
+
     const userStore = useUser();
     const showEditForm = ref(false);
     const itemId = ref('');
@@ -24,6 +27,7 @@
 
     function deleteEntry(id) {
         userStore.deleteFoodEntry(id).then((response) => console.log(response));
+        refresh();
     }
 
     function updateEntry(item) {
@@ -32,6 +36,7 @@
         food.calorie_value = item.calorie_value;
         food.taken_at = item.taken_at;
         showEditForm.value = true;
+        refresh();
     }
 
     const onSubmit = ((values) => {
@@ -43,6 +48,7 @@
             food.name = '';
             food.calorie_value = '';
             food.taken_at = '';
+            refresh();
         });
     });
 </script>

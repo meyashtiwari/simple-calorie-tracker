@@ -14,14 +14,16 @@
     const filter = reactive({
         start_at: '',
         end_at: ''
-    
     });
 
     
-    onMounted(async () => {
+    onMounted(() => {
+        getData();
+    });
+
+    async function getData() {
         food_entries.value = await userStore.getAllFoodEntries();
-
-    });
+    }
 
     const filterFoodEntries = async () => {
         food_entries.value = await userStore.filterFoodEntries(filter.start_at, filter.end_at);
@@ -32,7 +34,7 @@
 </script>
 
 <template>
-    <NavBar :dailyLimit="userStore.user.daily_calorie_limit" :metaData="food_entries.metaData" />
+    <NavBar @refresh="getData()" :dailyLimit="userStore.user.daily_calorie_limit" :metaData="food_entries.metaData" />
     Start Date
 <Field name="start_at" :rules="[required]" v-model="filter.start_at" >
                                         <Datepicker v-model="filter.start_at"  v-bind="field"></Datepicker>
