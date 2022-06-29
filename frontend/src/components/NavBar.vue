@@ -11,37 +11,38 @@
     import ModalBox from '@/components/ModalBox.vue';
     import InviteUser from "@/components/InviteUser.vue";
     
-const appName = import.meta.env.VITE_APP_NAME;
+    const appName = import.meta.env.VITE_APP_NAME;
 
-const props = defineProps({
-    dailyLimit: Number,
-    limit: Boolean,
-    admin: Boolean,
-    metaData: Array,
-    users: Array
-});
+    const props = defineProps({
+        dailyLimit: Number,
+        limit: Boolean,
+        admin: Boolean,
+        metaData: Array,
+        users: Array
+    });
 
-const food = reactive({
-    user_id: '',
-    name: '',
-    calorie_value: '',
-    taken_at: ''
-});
+    const food = reactive({
+        user_id: '',
+        name: '',
+        calorie_value: '',
+        taken_at: ''
+    });
 
-const emit = defineEmits(['refresh']);
-const refresh = () => emit('refresh');
+    const emit = defineEmits(['refresh']);
+    const refresh = () => emit('refresh');
 
-const showForm = ref(false);
-const store = useAuth();
-const userStore = useUser();
+    const showForm = ref(false);
+    const store = useAuth();
+    const userStore = useUser();
+    const showInviteForm = ref(false);
 
-const logout = () => {
-    store.signout();
-}
+    const logout = () => {
+        store.signout();
+    }
 
-const toggleForm = () => {
-    showForm.value = !showForm.value;
-}
+    const toggleForm = () => {
+        showForm.value = !showForm.value;
+    }
 
     const showInvite = () => {
         showInviteForm.value = !showInviteForm.value;
@@ -89,16 +90,16 @@ const toggleForm = () => {
                 </button>
             </div>
             <div v-show="!props.admin">
-                <button @click="showInvite" class="btn">
+                <button @click="showInvite" class="btn ml-5">
                     Invite Friends
                 </button>
             </div>
             <div v-show="props.admin" class="px-1">
-                <button @click="logout" class="btn">
+                <router-link to="/admin/report" class="btn link ml-5 link-hover ">Reports</router-link>  
+
+                <button @click="logout" class="btn ml-5">
                     Logout
-                </button>
-                
-                <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>  
+                </button>                
             </div>
             <div v-if="props.metaData" class="px-1">
                 <span class="text-red-500 px-5 font-bold"
