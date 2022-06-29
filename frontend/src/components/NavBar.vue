@@ -65,17 +65,17 @@
                 refresh();
             });
         }
-    } else {
-        userStore.createNewFoodEntry(values).then(async () => {
-            await userStore.getAllFoodEntries();
-            showForm.value = false;
-            food.name = '';
-            food.calorie_value = '';
-            food.taken_at = '';
-            refresh();
-        });
-    }
-});
+        } else {
+            userStore.createNewFoodEntry(values).then(async () => {
+                await userStore.getAllFoodEntries();
+                showForm.value = false;
+                food.name = '';
+                food.calorie_value = '';
+                food.taken_at = '';
+                refresh();
+            });
+        }
+    });
 
 </script>
 

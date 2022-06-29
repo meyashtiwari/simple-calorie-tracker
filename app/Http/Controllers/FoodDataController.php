@@ -154,7 +154,13 @@ class FoodDataController extends Controller
         ->whereRaw("date(taken_at) <= '$end'")
         ->where('user_id', $user->id)
         ->get();
-        return response(json_encode(["data" => $data]));
+
+        $metaData = FoodData::selectRaw('count(*) as count, SUM(calorie_value) as calories_today')
+                            ->whereRaw('date(taken_at) = date(now())')
+                            ->where('user_id', $user->id)
+                            ->get();
+
+        return response(json_encode(["data" => $data, "metaData" => $metaData]));
         
     }
 }

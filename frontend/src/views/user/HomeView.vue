@@ -27,13 +27,13 @@ async function getData() {
     food_entries.value = await userStore.getAllFoodEntries();
 }
 
-const filterFoodEntries = async () => {
+
+const filterFoodEntries = (async (values) => {
     filter.start_at = moment(filter.start_at).format('YYYY-M-D H:m:s');
     filter.end_at = moment(filter.end_at).format('YYYY-M-D H:m:s');
     food_entries.value = await userStore.filterFoodEntries(filter.start_at, filter.end_at);
     refresh();
-}
-
+});
 
 
 </script>
@@ -41,15 +41,23 @@ const filterFoodEntries = async () => {
 <template>
     <NavBar @refresh="getData()" :dailyLimit="userStore.user.daily_calorie_limit" :metaData="food_entries.metaData" />
     <div class="flex flex-col w-full lg:flex-row p-2 items-center">
-        <span class="px-2">Start Date</span>
-        <Field name="start_at" :rules="[required]" v-model="filter.start_at">
-            <Datepicker v-model="filter.start_at" v-bind="field"></Datepicker>
-        </Field>
-        <span  class="px-2">End Date</span>
-        <Field name="end_at" :rules="[required]" v-model="filter.end_at">
-            <Datepicker v-model="filter.end_at" v-bind="field"></Datepicker>
-        </Field>
-        <button @click="filterFoodEntries" class="btn  normal-case px-5 ml-5">Filter</button>
+        <Form class="flex flex-col w-full lg:flex-row p-2 items-center" @submit="filterFoodEntries">
+            <span class="px-2">Start Date</span>
+            <Field name="start_at" :rules="[required]" v-model="filter.start_at" v-slot="{field, errors}">
+                <Datepicker v-model="filter.start_at" v-bind="field"></Datepicker>
+            </Field>
+            <ErrorMessage class="text-red-400 text-sm" name="start_at">
+                <p class="text-red-400 text-sm">Start at date is invalid</p>
+            </ErrorMessage>
+            <span  class="px-2">End Date</span>
+            <Field name="end_at" :rules="[required]" v-model="filter.end_at" v-slot="{field, errors}">
+                <Datepicker v-model="filter.end_at" v-bind="field"></Datepicker>
+            </Field>
+            <ErrorMessage class="text-red-400 text-sm" name="end_at">
+                <p class="text-red-400 text-sm">End at date is invalid</p>
+            </ErrorMessage>
+            <button type="submit" class="btn  normal-case px-5 ml-5">Filter</button>
+        </Form>
     </div>
     <div class="flex flex-col w-full lg:flex-row">
         <div class="grid flex-grow h-full card bg-base-300 rounded-box">
