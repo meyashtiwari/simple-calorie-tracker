@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import {useAuth} from './auth'
 import ApiHandler from "../utils/ApiHandler"
+import InviteUserVue from '../components/InviteUser.vue'
 
 export const useUser = defineStore('user', {
     state: () => ({
@@ -147,6 +148,17 @@ export const useUser = defineStore('user', {
             try {
                 const {data} = await ApiHandler.get(`/admin/users`,  ApiHandler.getAuthHeader())
                 return data
+            } catch (error) {
+                if (error.response.data.error) {
+                    return {error: error.response.data.error}
+                }
+                return false
+            }
+        },
+        async inviteUser(request) {
+            try {
+                const {data} = await ApiHandler.post('/users/invite',  ApiHandler.getAuthHeader(), request)
+                return data;
             } catch (error) {
                 if (error.response.data.error) {
                     return {error: error.response.data.error}

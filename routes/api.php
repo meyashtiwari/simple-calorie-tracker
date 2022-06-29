@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function() {
     Route::controller(UserController::class)->prefix('users')->group(function() {
         Route::get('/me', 'getCurrentUser');
         Route::get('/calories', 'getTotalCaloriesForToday');
+        Route::post('/invite', 'inviteUser');
     });
 
     Route::apiResource('food', FoodDataController::class);

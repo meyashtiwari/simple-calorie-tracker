@@ -7,7 +7,9 @@
     import { required } from "@vee-validate/rules";
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
-    import moment from 'moment'
+    import moment from 'moment';
+    import ModalBox from '@/components/ModalBox.vue';
+    import InviteUser from "@/components/InviteUser.vue";
     
     const appName = import.meta.env.VITE_APP_NAME;
 
@@ -30,6 +32,7 @@
     const refresh = () => emit('refresh');
 
     const showForm = ref(false);
+    const showInviteForm = ref(false);
     const store = useAuth();
     const userStore = useUser();
 
@@ -39,6 +42,10 @@
 
     const toggleForm = () => {
         showForm.value = !showForm.value;
+    }
+
+    const showInvite = () => {
+        showInviteForm.value = !showInviteForm.value;
     }
 
     const onSubmit = ((values) => {
@@ -81,13 +88,17 @@
                     New Food Entry
                 </button>
             </div>
+            <div v-show="!props.admin">
+                <button @click="showInvite" class="btn">
+                    Invite Friends
+                </button>
+            </div>
             <div v-show="props.admin" class="px-1">
                 <button @click="logout" class="btn">
                     Logout
                 </button>
                 
-                <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>
-                
+                <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>  
             </div>
             <div v-if="props.metaData" class="px-1">
                 <span class="text-red-500" v-show="props?.metaData[0]?.calories_today>props.dailyLimit" >Calorie limit exceeded for today</span>
@@ -198,4 +209,11 @@
             </Form>
         </div>
     </AddEntryForm>
+
+    <ModalBox :modal-open="showInviteForm">
+        <label @click="showInviteForm = !showInviteForm" for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <div class="flex justify-center p-5">
+            <InviteUser />
+        </div>
+    </ModalBox>
 </template>
