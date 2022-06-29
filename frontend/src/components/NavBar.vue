@@ -56,6 +56,7 @@
     <div class="navbar bg-base-300">
         <div class="flex-1">
             <a class="btn btn-ghost normal-case text-xl">{{ appName }}</a>
+            <router-link to="/admin/dashboard" class="btn link link-hover ">Dashboard</router-link>
             <div>
                 <button @click="toggleForm" class="btn">
                     New Food Entry
@@ -65,7 +66,9 @@
                 <button @click="logout" class="btn">
                     Logout
                 </button>
+                
                 <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>
+                
             </div>
             <div v-if="props.metaData" class="px-1">
                 <span class="text-red-500" v-show="props?.metaData[0]?.calories_today>props.dailyLimit" >Calorie limit exceeded for today</span>
