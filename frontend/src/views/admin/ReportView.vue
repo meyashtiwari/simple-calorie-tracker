@@ -27,21 +27,37 @@
 
 <template>
     <NavBar :admin="true" :users="users.data"/>
-
-    <div class="flex flex-col w-full lg:flex-row">
-        <div v-if="last_seven_food_entries.data&&last_seven_food_prev_entries.data" class="grid flex-grow h-full card bg-base-300 rounded-box">
-            <span>Last 7 Days {{last_seven_food_entries.data[0].count}}</span>
-            <span>The week before that {{last_seven_food_prev_entries.data[0].count-last_seven_food_entries.data[0].count}}</span>
-        </div> 
-
-        
+<div class="stats shadow flex items-center mt-5">
+  
+  
+  
+  <div class="stat">
+    <div class="stat-figure text-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
     </div>
-    <div class="flex flex-col w-full lg:flex-row">
-        <div v-if="calorieLastSeven.data" class="grid flex-grow h-full card bg-base-300 rounded-box">
-            <span>Calorie Last 7 Days {{calorieLastSeven.data[0].avg}}</span>
-            
-        </div> 
-        
-        
+    <div class="stat-title">Last 7 Days</div>
+    <div class="stat-value text-secondary" v-if="last_seven_food_entries.data&&last_seven_food_prev_entries.data">{{last_seven_food_entries.data[0].count}}</div>
+    
+  </div>
+  <div class="stat">
+    <div class="stat-figure text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
     </div>
+    <div class="stat-title">The week before that </div>
+    <div class="stat-value text-primary" v-if="last_seven_food_entries.data&&last_seven_food_prev_entries.data"> {{last_seven_food_prev_entries.data[0].count-last_seven_food_entries.data[0].count}}</div>
+    
+  </div>
+  <div class="stat">
+    <div class="stat-figure text-secondary">
+      
+    </div>
+    <div class="stat-value" v-if="calorieLastSeven.data">{{calorieLastSeven.data[0].avg}}</div>
+    <div class="stat-title">Avg Calories in Last 7 Days</div>
+    
+  </div>
+  
+</div>
+
+
+    
 </template>

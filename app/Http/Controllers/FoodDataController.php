@@ -147,7 +147,9 @@ class FoodDataController extends Controller
     {
         $start = $request->start;
         $end = $request->end;
+
         $user = auth()->user();
+        
         $data = FoodData::whereRaw("date(taken_at) >= '$start'")
         ->whereRaw("date(taken_at) <= '$end'")
         ->where('user_id', $user->id)

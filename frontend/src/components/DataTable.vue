@@ -75,10 +75,10 @@
                     <td v-show="props.admin">
                         <div class="flex">
                             <div class="pr-5">
-                                <button @click="updateEntry(item)" class="btn btn-square">Edit</button>
+                                <button @click="updateEntry(item)" class="btn ">Edit</button>
                             </div>
                             <div>
-                                <button @click="deleteEntry(item.id)" class="btn btn-square">Delete</button>
+                                <button @click="deleteEntry(item.id)" class="btn">Delete</button>
                             </div>
                         </div>
                     </td>
