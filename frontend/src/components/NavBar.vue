@@ -43,6 +43,7 @@
 
     const onSubmit = ((values) => {
         values.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
+        food.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
         if(props.admin === true) {
             if(food.user_id === '')
                 return;
