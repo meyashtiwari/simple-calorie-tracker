@@ -9,13 +9,14 @@
     const last_seven_food_entries = ref([]);
     const last_seven_food_prev_entries = ref([]);
     const calorieLastSeven = ref([]);
+    const users = ref([]);
     
     onMounted(async () => {
         food_entries.value = await userStore.getAllUsersFoodEntries();
         last_seven_food_entries.value = await userStore.getAllUsersLastSevenFoodEntries();
         last_seven_food_prev_entries.value = await userStore.getAllUsersLastSevenPrevFoodEntries();
         calorieLastSeven.value = await userStore.avgCalorieLastSeven();
-        
+        users.value = await userStore.getAllUsers();
     });
 
     
@@ -23,7 +24,7 @@
 </script>
 
 <template>
-    <NavBar :admin="true" />
+    <NavBar :admin="true" :users="users.data"/>
 
     <div class="flex flex-col w-full lg:flex-row">
         <div v-if="last_seven_food_entries.data&&last_seven_food_prev_entries.data" class="grid flex-grow h-full card bg-base-300 rounded-box">
