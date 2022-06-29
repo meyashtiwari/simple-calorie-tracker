@@ -8,6 +8,7 @@
     import { numeric, required } from "@vee-validate/rules";
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
+    import moment from 'moment'
 
     const userStore = useUser();
     const food_entries = ref([]);
@@ -26,6 +27,8 @@
     }
 
     const filterFoodEntries = async () => {
+        filter.start_at= moment(filter.start_at).format('YYYY-M-D H:m:s');
+        filter.end_at= moment(filter.end_at).format('YYYY-M-D H:m:s');
         food_entries.value = await userStore.filterFoodEntries(filter.start_at, filter.end_at);
     }
 
