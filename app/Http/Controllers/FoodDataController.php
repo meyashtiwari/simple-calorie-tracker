@@ -141,4 +141,16 @@ class FoodDataController extends Controller
         return response(json_encode(["data" => $data]));
         
     }
+    public function filterFoodEntries(Request $request)
+    {
+        $start = $request->start;
+        $end = $request->end;
+        $user = auth()->user();
+        $data = FoodData::whereRaw("date(taken_at) >= '$start'")
+        ->whereRaw("date(taken_at) <= '$end'")
+        ->where('user_id', $user->id)
+        ->get();
+        return response(json_encode(["data" => $data]));
+        
+    }
 }

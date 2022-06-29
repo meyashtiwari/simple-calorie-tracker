@@ -91,6 +91,14 @@ export const useUser = defineStore('user', {
                 return false
             }
         },
+        async filterFoodEntries(start,end) {
+            try {
+                const {data} = await ApiHandler.get('/foodFilter', ApiHandler.getAuthHeader(), {start:start,end:end});
+                return data;
+            } catch (error) {
+                return false
+            }
+        },
         async createNewFoodEntry(data) {
             try {
                 await ApiHandler.post('/food',  ApiHandler.getAuthHeader(), data)

@@ -23,6 +23,6 @@
         <div class="grid flex-grow h-full card bg-base-300 rounded-box">
             <DataTable :foodEntries="food_entries.data" />
         </div> 
-        <div class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">content</div>
+        
     </div>
 </template>

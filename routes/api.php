@@ -32,5 +32,6 @@ Route::middleware('auth:api')->group(function() {
     Route::get('foodLastSeven', [FoodDataController::class,'foodLastSeven']);
     Route::get('foodLastSevenPrev', [FoodDataController::class,'foodLastSevenPrev']);
     Route::get('avgCalorieLastSeven', [FoodDataController::class,'avgCalorieLastSeven']);
+    Route::get('foodFilter', [FoodDataController::class,'filterFoodEntries']);
     
 });
