@@ -38,4 +38,7 @@ Route::middleware('auth:api')->group(function() {
         Route::get('/users', 'getAllUsers');
         Route::post('/food', 'createFoodEntryAdmin');
     });
+    
+    Route::get('foodFilter', [FoodDataController::class,'filterFoodEntries']);
+    
 });
