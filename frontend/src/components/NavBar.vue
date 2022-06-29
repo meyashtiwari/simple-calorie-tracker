@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { useAuth } from "@/stores/auth.js";
-import { useUser } from "@/stores/user.js";
-import AddEntryForm from "@/components/AddEntryForm.vue";
-import { Field, Form, ErrorMessage } from "vee-validate"
-import { required } from "@vee-validate/rules";
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import moment from 'moment'
-
+    import {ref, reactive} from "vue";
+    import {useAuth} from "@/stores/auth.js";
+    import {useUser} from "@/stores/user.js";
+    import AddEntryForm from "@/components/AddEntryForm.vue";
+    import {Field, Form, ErrorMessage} from "vee-validate"
+    import { required } from "@vee-validate/rules";
+    import Datepicker from '@vuepic/vue-datepicker';
+    import '@vuepic/vue-datepicker/dist/main.css'
+    import moment from 'moment';
+    import ModalBox from '@/components/ModalBox.vue';
+    import InviteUser from "@/components/InviteUser.vue";
+    
 const appName = import.meta.env.VITE_APP_NAME;
 
 const props = defineProps({
@@ -41,14 +43,18 @@ const toggleForm = () => {
     showForm.value = !showForm.value;
 }
 
-const onSubmit = ((values) => {
-    values.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
-    food.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
-    if (props.admin === true) {
-        if (food.user_id === '')
-            return;
-        else {
-            userStore.createNewFoodEntryAdmin(food).then(async () => {
+    const showInvite = () => {
+        showInviteForm.value = !showInviteForm.value;
+    }
+
+    const onSubmit = ((values) => {
+        values.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
+        food.taken_at = moment(values.taken_at).format('YYYY-M-D H:m:s');
+        if(props.admin === true) {
+            if(food.user_id === '')
+                return;
+            else {
+                userStore.createNewFoodEntryAdmin(food).then(async () => {
                 await userStore.getAllFoodEntries();
                 showForm.value = false;
                 food.user_id = '';
@@ -82,18 +88,17 @@ const onSubmit = ((values) => {
                     New Food Entry
                 </button>
             </div>
-
-            <div v-show="props.admin" class="flex ">
-                <div >
-                <router-link to="/admin/report" class="btn link link-hover ml-5">Reports</router-link>
-                </div>
-                <div>
-                    <a class="btn ml-5" @click="logout">Logout</a>
-                </div>
-
-
-
-
+            <div v-show="!props.admin">
+                <button @click="showInvite" class="btn">
+                    Invite Friends
+                </button>
+            </div>
+            <div v-show="props.admin" class="px-1">
+                <button @click="logout" class="btn">
+                    Logout
+                </button>
+                
+                <router-link to="/admin/report" class="btn link link-hover ">Reports</router-link>  
             </div>
             <div v-if="props.metaData" class="px-1">
                 <span class="text-red-500 px-5 font-bold"
@@ -264,4 +269,11 @@ const onSubmit = ((values) => {
             </Form>
         </div>
     </AddEntryForm>
+
+    <ModalBox :modal-open="showInviteForm">
+        <label @click="showInviteForm = !showInviteForm" for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+        <div class="flex justify-center p-5">
+            <InviteUser />
+        </div>
+    </ModalBox>
 </template>
